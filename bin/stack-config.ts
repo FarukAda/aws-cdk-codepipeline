@@ -8,7 +8,7 @@ const environmentConfig: IAwsCdkCodepipelineStackProps = {
   stackToDeploy: 'MyFirstCdkStack',
   template: 'MyFirstCdkStack.template.json',
   github: {
-    owner: 'CodingWithFaruci',
+    owner: 'FarukAda',
     repo: 'my-first-cdk',
     branch: 'main',
   },
@@ -22,7 +22,7 @@ const environmentConfig: IAwsCdkCodepipelineStackProps = {
     'iam:GetRole',
     'iam:CreateRole',
     'iam:AttachRolePolicy',
-  ]
+  ],
 };
 
 export default environmentConfig;

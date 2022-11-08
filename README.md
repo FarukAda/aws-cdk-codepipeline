@@ -1,8 +1,10 @@
-# Welcome to your CDK TypeScript project
+# AWS CDK Codepipeline
 
-This is a blank project for CDK development with TypeScript.
+This is an example project for CDK development with TypeScript.
+The project contains an AWS Codepipeline for deploying Cloudformation templates.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+The `lib/aws-cdk-codepipeline-stack.ts` contains the AWS infrastructure.
+The `bin/stack-config.ts` contains the stack environment variables.
 
 ## Useful commands
 

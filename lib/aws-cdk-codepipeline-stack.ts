@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -26,13 +27,13 @@ export class AwsCdkCodepipelineStack extends cdk.Stack {
     });
     role.addToPolicy(new iam.PolicyStatement({
       resources: ['*'],
-      actions: props.permissions
+      actions: props.permissions,
     }));
 
     /** KMS */
     const key = new kms.Key(this, 'key', {
       alias: 'alias/codepipeline-key',
-      description: 'KMS key for AWS Codepipeline'
+      description: 'KMS key for AWS Codepipeline',
     });
     key.grantEncryptDecrypt(role);
 
@@ -63,9 +64,9 @@ export class AwsCdkCodepipelineStack extends cdk.Stack {
     const buildSpec = new codebuild.PipelineProject(this, 'buildSpec', {
       role,
       buildSpec: codebuild.BuildSpec.fromObject(buildSpecObject),
-      encryptionKey: key
-    })
-    
+      encryptionKey: key,
+    });
+
     /** Codepipeline Artifacts */
     const output = new codepipeline.Artifact();
     const buildOutput = new codepipeline.Artifact('buildOutput');
@@ -74,25 +75,25 @@ export class AwsCdkCodepipelineStack extends cdk.Stack {
     const githubSourceAction = new codepipeline_actions.GitHubSourceAction({
       actionName: 'Checkout_Code',
       output,
-      owner: props.github.owner, 
+      owner: props.github.owner,
       repo: props.github.repo,
       branch: props.github.branch,
       oauthToken: cdk.SecretValue.secretsManager('my-github-token'),
-      trigger: codepipeline_actions.GitHubTrigger.WEBHOOK
-    })
+      trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+    });
 
     const buildAction = new codepipeline_actions.CodeBuildAction({
       actionName: 'Build',
       role,
       input: output,
       project: buildSpec,
-      outputs: [buildOutput]
-    })
+      outputs: [buildOutput],
+    });
 
     const approvalAction = new codepipeline_actions.ManualApprovalAction({
       actionName: 'Approval',
-      role
-    })
+      role,
+    });
 
     const deployAction = new codepipeline_actions.CloudFormationCreateUpdateStackAction({
       actionName: 'Deploy',
@@ -100,8 +101,8 @@ export class AwsCdkCodepipelineStack extends cdk.Stack {
       deploymentRole: role,
       adminPermissions: false,
       stackName: props.stackToDeploy,
-      templatePath: buildOutput.atPath(props.template)
-    })
+      templatePath: buildOutput.atPath(props.template),
+    });
 
     /** Codepipeline */
     const pipeline = new codepipeline.Pipeline(this, 'codepipeline', {
@@ -111,30 +112,30 @@ export class AwsCdkCodepipelineStack extends cdk.Stack {
       stages: [
         {
           stageName: 'Source',
-          actions: [githubSourceAction]
+          actions: [githubSourceAction],
         },
         {
           stageName: 'Build',
-          actions: [buildAction]
+          actions: [buildAction],
         },
         {
           stageName: 'Approval',
-          actions: [approvalAction]
+          actions: [approvalAction],
         },
         {
           stageName: 'Deploy',
-          actions: [deployAction]
-        }
-      ]
-    })
+          actions: [deployAction],
+        },
+      ],
+    });
     pipeline.addToRolePolicy(new iam.PolicyStatement({
       actions: ['sts:AssumeRole'],
-      resources: [role.roleArn]
-    }))
+      resources: [role.roleArn],
+    }));
 
     /** Notifications */
     const topic = new sns.Topic(this, 'topic', {
-      topicName: 'codepipeline-topic'
+      topicName: 'codepipeline-topic',
     });
     topic.grantPublish(role);
 
@@ -144,7 +145,7 @@ export class AwsCdkCodepipelineStack extends cdk.Stack {
         'codebuild-project-build-state-succeeded',
         'codebuild-project-build-state-failed',
       ],
-      targets: [topic]
-    })
+      targets: [topic],
+    });
   }
 }

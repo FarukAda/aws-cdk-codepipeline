@@ -3,9 +3,10 @@
     "target": "ES2018",
     "module": "commonjs",
     "lib": [
+      "dom",
       "es2018"
     ],
-    "declaration": true,
+    "declaration": false,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -18,10 +19,12 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "strictPropertyInitialization": true,
     "typeRoots": [
       "./node_modules/@types"
-    ]
+    ],
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules",
