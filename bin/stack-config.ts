@@ -5,41 +5,30 @@ const environmentConfig: IAwsCdkCodepipelineStackProps = {
     Developer: 'Faruk Ada',
     Application: 'AwsCdkCodepipeline',
   },
-  deployStackName: 'MyFirstCdkStack',
-  template: 'MyFirstCdkStack.template.json',
-  projectName: 'CDK-Deployment',
-  pipelineName: 'DeploymentPipeline',
-  keyDescription: 'KMS key used for Codepipeline',
-  bucketName:'coding-with-faruci-codepipeline-bucket',
-  topicName: 'codepipeline-topic',
-  subEmails: [],
   role: {
     name: 'codepipeline-role',
     description: 'IAM role for Codepipeline',
     managedPolicy: 'AdministratorAccess',
   },
+  keyDescription: 'KMS key used by Codepipeline',
   github: {
     tokenSecretName: 'my-github-token',
     owner: 'FarukAda',
     repo: 'my-first-cdk',
     branch: 'main',
   },
-  buildSpecObject: {
-    version: '0.2',
-    phases: {
-      install: {
-        commands: ['npm ci'],
-      },
-      build: {
-        commands: [
-          'npm run build',
-          'npm run test',
-        ],
-      },
-      post_build: {
-        commands: ['npm run deploy'],
-      },
-    },
+  codebuild: {
+    templateProject: 'BuildTemplate',
+    lambdaProject: 'BuildLambda',
+    targetStack: 'MyFirstCdkStack',
+    targetTemplate: 'MyFirstCdkStack.template.json',
+    targetLambda: 'index.js',
+  },
+  pipelineName: 'LambdaDeploymentPipeline',
+  bucketName:'coding-with-faruci-codepipeline-bucket',
+  topic: {
+    name: 'codepipeline-topic',
+    subEmails: [],
   },
 };
 
