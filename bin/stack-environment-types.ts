@@ -17,7 +17,6 @@ export interface IAwsCdkCodepipelineStackProps extends StackProps {
     templateProject: string,
     lambdaProject: string,
     targetStack: string,
-    targetTemplate: string,
     targetLambda: string,
   },
   pipelineName: string,

@@ -76,7 +76,7 @@ export class AwsCdkCodepipelineStack extends cdk.Stack {
         `npx cdk synth ${props.codebuild.targetStack} -o dist`,
       ],
       'dist',
-      [props.codebuild.targetTemplate],
+      [`${props.codebuild.targetStack}.template.json`],
     );
     const buildLambda = getBuildSpec(
       props.codebuild.lambdaProject,
@@ -129,7 +129,7 @@ export class AwsCdkCodepipelineStack extends cdk.Stack {
       deploymentRole: role,
       adminPermissions: true,
       stackName: props.codebuild.targetStack,
-      templatePath: templateOutput.atPath(props.codebuild.targetTemplate),
+      templatePath: templateOutput.atPath(`${props.codebuild.targetStack}.template.json`),
       extraInputs: [lambdaOutput],
       cfnCapabilities: [
         cdk.CfnCapabilities.NAMED_IAM,
