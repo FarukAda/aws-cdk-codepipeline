@@ -56,7 +56,7 @@ test('Contains CodeBuild TemplateProject', () => {
   '      "commands": [\n        "npm run build"\n      ]\n    },\n    "post_build":' +
   ' {\n      "commands": [\n        "npm run test",\n        "npx cdk synth MyFirstCdkStack' +
   ' -o dist"\n      ]\n    }\n  },\n  "artifacts": {\n    "base-directory":' +
-  ` "dist",\n    "files": [\n      "${environmentConfig.codebuild.targetTemplate}"\n    ]\n  }\n}`;
+  ` "dist",\n    "files": [\n      "${environmentConfig.codebuild.targetStack}.template.json"\n    ]\n  }\n}`;
 
   template.hasResourceProperties('AWS::CodeBuild::Project', {
     Name: environmentConfig.codebuild.templateProject,
@@ -178,7 +178,7 @@ test('Contains CodePipeline Pipeline', () => {
               // eslint-disable-next-line max-len
               ParameterOverrides: '{"bucketName":{"Fn::GetArtifactAtt":["lambdaOutput","BucketName"]},"bucketKey":{"Fn::GetArtifactAtt":["lambdaOutput","ObjectKey"]}}',
               ActionMode: 'CREATE_UPDATE',
-              TemplatePath: `templateOutput::${environmentConfig.codebuild.targetTemplate}`,
+              TemplatePath: `templateOutput::${environmentConfig.codebuild.targetStack}.template.json`,
             },
             InputArtifacts: [
               {
